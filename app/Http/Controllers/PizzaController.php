@@ -15,7 +15,9 @@ class PizzaController extends Controller
     public function index()
     {
         // dd(Pizza::find(2)->items);
-        dd(Pizza::find(2)->items->sum('price'));
+        // dd(Pizza::find(2)->items->sum('price'));
+        $pizzas = Pizza::all();
+        return view('pizzas.index', ['pizzas' => $pizzas]);
     }
 
     /**
@@ -58,7 +60,8 @@ class PizzaController extends Controller
      */
     public function edit(Pizza $pizza)
     {
-        //
+        // dd($pizza);
+        return view('pizzas.edit', ['pizza' => $pizza]);
     }
 
     /**
@@ -70,7 +73,7 @@ class PizzaController extends Controller
      */
     public function update(Request $request, Pizza $pizza)
     {
-        //
+        dd($pizza);
     }
 
     /**

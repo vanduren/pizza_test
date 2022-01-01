@@ -14,7 +14,7 @@ class ItemPizzaController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -80,6 +80,6 @@ class ItemPizzaController extends Controller
      */
     public function destroy(ItemPizza $itemPizza)
     {
-        //
+        dd($itemPizza);
     }
 }

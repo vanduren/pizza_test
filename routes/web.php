@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemPizzaController;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\UnitController;
 use App\Models\Unit;
@@ -24,3 +25,4 @@ Route::get('/', function () {
 Route::resource('item', ItemController::class);
 Route::resource('unit', UnitController::class);
 Route::resource('pizza', PizzaController::class);
+Route::resource('item_pizza', ItemPizzaController::class);
