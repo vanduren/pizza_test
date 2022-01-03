@@ -3,6 +3,7 @@
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemPizzaController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PizzaController;
 use App\Http\Controllers\UnitController;
 use App\Models\Unit;
@@ -14,14 +15,28 @@ Route::get('/', function () {
 
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'checkLogin'])->name('checkLogin');
-Route::resource('item', ItemController::class);
-Route::resource('unit', UnitController::class);
-Route::resource('pizza', PizzaController::class);
-Route::resource('item_pizza', ItemPizzaController::class);
 
+Route::group(['middleware' => ['isAdmin']], function () {
+    Route::resource('item', ItemController::class);
+    Route::resource('unit', UnitController::class);
+    Route::resource('pizza', PizzaController::class);
+    Route::resource('item_pizza', ItemPizzaController::class);
+});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('order', OrderController::class);
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
+// Route::resource('item', ItemController::class);
+// Route::resource('unit', UnitController::class);
+// Route::resource('pizza', PizzaController::class);
+// Route::resource('item_pizza', ItemPizzaController::class);
+
+// Route::resource('order', OrderController::class);
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 require __DIR__.'/auth.php';
