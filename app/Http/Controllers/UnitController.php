@@ -82,6 +82,7 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
-        //
+        Unit::destroy($unit->id);
+        return redirect(route('unit.index'));
     }
 }

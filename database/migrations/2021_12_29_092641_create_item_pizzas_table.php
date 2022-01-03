@@ -14,6 +14,7 @@ class CreateItemPizzasTable extends Migration
     public function up()
     {
         Schema::create('item_pizza', function (Blueprint $table) {
+            $table->id();
             $table->bigInteger('item_id')->unsigned();
             $table->foreign('item_id')
                   ->references('id')->on('items')
@@ -22,7 +23,6 @@ class CreateItemPizzasTable extends Migration
             $table->foreign('pizza_id')
                   ->references('id')->on('pizzas')
                   ->onDelete('cascade');
-            $table->primary(['item_id', 'pizza_id']);
             $table->timestamps();
         });
     }

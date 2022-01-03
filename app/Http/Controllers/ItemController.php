@@ -25,7 +25,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view('items.create');
+        $units = Unit::all();
+        return view('items.create', ['units' => $units]);
     }
 
     /**
@@ -84,6 +85,7 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        //
+        Item::destroy($item->id);
+        return redirect(route('item.index'));
     }
 }

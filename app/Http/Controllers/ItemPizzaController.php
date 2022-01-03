@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ItemPizza;
+use App\Models\Pizza;
 use Illuminate\Http\Request;
 
 class ItemPizzaController extends Controller
@@ -35,7 +36,14 @@ class ItemPizzaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // add an item from the pizza edit form
+        // item_id is the id of the item to be added
+        // and pizza_id is the id of the pizza being edited
+        // dd([$request->item_id, $request->pizza_id]);
+        ItemPizza::create($request->all());
+        // get the pizza to return to editing the correct pizza
+        $pizza = Pizza::find($request->pizza_id);
+        return redirect(route('pizza.edit', $pizza));
     }
 
     /**
@@ -80,6 +88,10 @@ class ItemPizzaController extends Controller
      */
     public function destroy(ItemPizza $itemPizza)
     {
-        dd($itemPizza);
+        // get the pizza to return to editing the correct pizza
+        $pizza = Pizza::find($itemPizza->pizza_id);
+        // dd($pizza);
+        $itemPizza->delete();
+        return redirect(route('pizza.edit', $pizza));
     }
 }

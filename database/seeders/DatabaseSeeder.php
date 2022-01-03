@@ -6,7 +6,9 @@ use App\Models\Item;
 use App\Models\ItemPizza;
 use App\Models\Pizza;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,11 +33,11 @@ class DatabaseSeeder extends Seeder
         }
 
         $items = [
-            ['id' => 1, 'unit_id' => 2, 'name' => 'deeg', 'price' => 0.88],
-            ['id' => 2, 'unit_id' => 4, 'name' => 'ui', 'price' => 0.58],
-            ['id' => 3, 'unit_id' => 4, 'name' => 'kaas', 'price' => 1.08],
-            ['id' => 4, 'unit_id' => 5, 'name' => 'olijven', 'price' => 0.28],
-            ['id' => 5, 'unit_id' => 2, 'name' => 'tonijn', 'price' => 1.28],
+            ['id' => 1, 'unit_id' => 2, 'name' => 'deeg', 'price' => 88],
+            ['id' => 2, 'unit_id' => 4, 'name' => 'ui', 'price' => 58],
+            ['id' => 3, 'unit_id' => 4, 'name' => 'kaas', 'price' => 108],
+            ['id' => 4, 'unit_id' => 5, 'name' => 'olijven', 'price' => 28],
+            ['id' => 5, 'unit_id' => 2, 'name' => 'tonijn', 'price' => 128],
         ];
         foreach ($items as $item) {
             Item::create($item);
@@ -65,5 +67,13 @@ class DatabaseSeeder extends Seeder
             ItemPizza::create($itemPizza);
         }
 
+        $users = [
+            ['name' => 'admin', 'email' => 'admin@test.test', 'password' => Hash::make('password')],
+            ['name' => 'test', 'email' => 'test@test.test', 'password' => Hash::make('password')],
+
+        ];
+        foreach ($users as $user) {
+            User::create($user);
+        }
     }
 }

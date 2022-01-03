@@ -17,7 +17,7 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('name');
             $table->integer('unit_id');
-            $table->decimal('price', 5, 2)->unsigned()->default(0);
+            $table->integer('price')->unsigned()->default(0);
             $table->timestamps();
         });
     }

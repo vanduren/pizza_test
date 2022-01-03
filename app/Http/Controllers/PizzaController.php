@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
+use App\Models\ItemPizza;
 use App\Models\Pizza;
 use Illuminate\Http\Request;
 
@@ -27,7 +29,7 @@ class PizzaController extends Controller
      */
     public function create()
     {
-        //
+        return view('pizzas.create');
     }
 
     /**
@@ -38,7 +40,8 @@ class PizzaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Pizza::create($request->all());
+        return redirect(route('pizza.index'));
     }
 
     /**
@@ -60,8 +63,12 @@ class PizzaController extends Controller
      */
     public function edit(Pizza $pizza)
     {
-        // dd($pizza);
-        return view('pizzas.edit', ['pizza' => $pizza]);
+        // get all items in case an item has to be added
+        $items = Item::all();
+        // get all items for the selected pizza
+        $itemsPizza = ItemPizza::where('pizza_id', '=', $pizza->id)->get();
+        // dd($itemsPizza);
+        return view('pizzas.edit', ['pizza' => $pizza, 'itemsPizza' => $itemsPizza, 'items' => $items]);
     }
 
     /**
@@ -73,7 +80,10 @@ class PizzaController extends Controller
      */
     public function update(Request $request, Pizza $pizza)
     {
-        dd($pizza);
+        // only pizza is edited
+        // the items are edited using different buttons (form)
+        $pizza->update($request->all());
+        return redirect(route('pizza.index'));
     }
 
     /**
@@ -84,6 +94,12 @@ class PizzaController extends Controller
      */
     public function destroy(Pizza $pizza)
     {
-        //
+        // delete all items in item_pizza table
+        // delete the pizza
+        // $itemsPizza = ItemPizza::where('pizza_id', '=', $pizza->id)->get();
+        // dd($itemsPizza);
+        ItemPizza::where('pizza_id', '=', $pizza->id)->delete();
+        Pizza::destroy($pizza->id);
+        return redirect(route('pizza.index'));
     }
 }

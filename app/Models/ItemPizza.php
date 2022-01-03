@@ -10,5 +10,5 @@ class ItemPizza extends Model
     use HasFactory;
     public $table = 'item_pizza';
     protected $guarded = [];
-    
+
 }
