@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\ItemPizza;
 use App\Models\Pizza;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PizzaController extends Controller
 {
@@ -19,7 +20,9 @@ class PizzaController extends Controller
         // dd(Pizza::find(2)->items);
         // dd(Pizza::find(2)->items->sum('price'));
         $pizzas = Pizza::all();
-        return view('pizzas.index', ['pizzas' => $pizzas]);
+        if(Gate::any(['isAdmin', 'isEmployee'])) {
+            return view('pizzas.index', ['pizzas' => $pizzas]);
+        }
     }
 
     /**

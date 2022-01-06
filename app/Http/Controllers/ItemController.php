@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ItemController extends Controller
 {
@@ -15,7 +16,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return view('items.index', ['items' => Item::all()]);
+        if(Gate::any(['isAdmin', 'isEmployee'])) {
+            return view('items.index', ['items' => Item::all()]);
+        }
     }
 
     /**

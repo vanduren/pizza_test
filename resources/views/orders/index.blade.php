@@ -14,7 +14,11 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     order id
                 </th>
+                @can('isAdmin')
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    klant
                 </tr>
+                @endcan
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($orders as $order)
@@ -25,7 +29,11 @@
                     <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                         <a href="{{ route('order.edit', $order) }}" class="text-indigo-600 hover:text-indigo-900">{{ $order->status }}</a>
                     </td>
-
+                    @can('isAdmin')
+                    <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                        <a href="{{ route('order.edit', $order) }}" class="text-indigo-600 hover:text-indigo-900">{{ $order->name }}</a>
+                    </td>
+                    @endcan
                     <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
                         <form action="{{ route('order.destroy', $order) }}" method="post">
                             @csrf

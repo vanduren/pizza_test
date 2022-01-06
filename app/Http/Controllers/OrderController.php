@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderPizza;
 use App\Models\Pizza;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
@@ -16,7 +19,16 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::all();
+        if(Gate::any(['isAdmin', 'isEmployee'])) {
+            // for personal orders the name of client is important
+            $orders = Order::join('users', 'users.id', '=', 'orders.user_id')
+                ->where('status', '<>', 'finished')
+                ->get(['users.*', 'orders.*']);
+            // $orders = Order::where('status', '<>', 'finished')->get();
+        }else{
+            $orders = Order::where('orders.user_id', '=', auth()->user()->id)
+                ->get();
+        }
         return view('orders.index', ['orders' => $orders]);
     }
 
@@ -49,7 +61,7 @@ class OrderController extends Controller
         // dd($totalPrice);
         // create a new order
         $order = new Order();
-        $order->status = 'pending';
+        $order->status = 'besteld';
         $order->user_id = auth()->user()->id;
         $order->price = $totalPrice;
         $order->save();
@@ -85,10 +97,16 @@ class OrderController extends Controller
      */
     public function edit(Order $order)
     {
-        // send current order, all pizzas associated wuth order, all pizzas
+        // send current order and its customer, all pizzas associated wuth order, all pizzas
+        $user = User::find($order->user_id)->first();
         $orderPizzas = OrderPizza::where('order_id', $order->id)->get();
         // dd($orderPizzas);
-        return view('orders.edit', ['order' => $order, 'orderPizzas' => $orderPizzas, 'pizzas' => Pizza::all()]);
+        return view('orders.edit', [
+            'order' => $order,
+            'orderPizzas' => $orderPizzas,
+            'pizzas' => Pizza::all(),
+            'user' => $user
+        ]);
     }
 
     /**
@@ -110,6 +128,7 @@ class OrderController extends Controller
         }
         // update order
         $order->price = $totalPrice;
+        $order->status = $request->status;
         $order->update();
         // use order to fill order_pizza table
         foreach ($request->pizzas as $pizza_id) {

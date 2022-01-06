@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class UnitController extends Controller
 {
@@ -14,7 +16,9 @@ class UnitController extends Controller
      */
     public function index()
     {
-        return view('units.index', ['units' => Unit::all()]);
+        if(Gate::any(['isAdmin', 'isEmployee'])) {
+            return view('units.index', ['units' => Unit::all()]);
+        }
     }
 
     /**
